@@ -1,0 +1,26 @@
+core:
+  config:
+    fs.defaultFS: hdfs://namenode:9000
+
+hdfs:
+  replication: 3
+  namenode:
+    nameDir: /hadoop/dfs/name
+  defaultFS: hdfs://namenode:9000
+  config:
+    dfs.replication: 3
+
+yarn:
+  auxServices: mapreduce
+  shuffleClass: org.apache.hadoop.mapred.ShuffleHandler
+  config:
+    yarn.nodemanager.aux-services: mapreduce_shuffle
+    yarn.nodemanager.aux-services.mapreduce.shuffle.class: org.apache.hadoop.mapred.ShuffleHandler
+    yarn.nodemanager.aux-services.mapreduce.shuffle.enabled: true
+resources:
+  requests:
+    memory: "512Mi"
+    cpu: "500m"
+  limits:
+    memory: "1Gi"
+    cpu: "1"

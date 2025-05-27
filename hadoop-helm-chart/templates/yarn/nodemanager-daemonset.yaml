@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: {{ include "hadoop-helm-chart.fullname" . }}-nodemanager
+  labels:
+    app: {{ include "hadoop-helm-chart.name" . }}
+    component: nodemanager
+spec:
+  selector:
+    matchLabels:
+      app: {{ include "hadoop-helm-chart.name" . }}
+      component: nodemanager
+  template:
+    metadata:
+      labels:
+        app: {{ include "hadoop-helm-chart.name" . }}
+        component: nodemanager
+    spec:
+      containers:
+        - name: nodemanager
+          image: {{ .Values.yarn.nodemanager.image }}
+          ports:
+            - containerPort: 8042
+          env:
+            - name: HADOOP_CONF_DIR
+              value: /etc/hadoop/conf
+          volumeMounts:
+            - name: hadoop-config
+              mountPath: /etc/hadoop/conf
+      volumes:
+        - name: hadoop-config
+          configMap:
+            name: {{ include "hadoop-helm-chart.fullname" . }}-configmap
+      tolerations:
+        - key: "node-role.kubernetes.io/master"
+          effect: NoSchedule
+      nodeSelector:
+        node-role.kubernetes.io/worker: ""

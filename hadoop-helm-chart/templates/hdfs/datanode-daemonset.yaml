@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: {{ include "hadoop-helm-chart.fullname" . }}-datanode
+  labels:
+    app: {{ include "hadoop-helm-chart.name" . }}
+    component: datanode
+spec:
+  selector:
+    matchLabels:
+      app: {{ include "hadoop-helm-chart.name" . }}
+      component: datanode
+  template:
+    metadata:
+      labels:
+        app: {{ include "hadoop-helm-chart.name" . }}
+        component: datanode
+    spec:
+      containers:
+        - name: datanode
+          image: "{{ .Values.hdfs.datanode.image }}"
+          ports:
+            - containerPort: 50010
+              name: datanode
+            - containerPort: 50075
+              name: datanode-http
+          volumeMounts:
+            - name: hdfs-data
+              mountPath: /data/hdfs/datanode
+      volumes:
+        - name: hdfs-data
+          hostPath:
+            path: /mnt/hdfs/datanode
+      tolerations:
+        - key: "node-role.kubernetes.io/master"
+          effect: NoSchedule
+      nodeSelector:
+        node-type: hadoop

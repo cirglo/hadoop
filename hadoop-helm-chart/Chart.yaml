@@ -1,0 +1,13 @@
+name: hadoop-helm-chart
+version: 0.1.0
+description: A Helm chart for deploying Hadoop HDFS and YARN resources
+maintainers:
+  - name: Chad Hardin
+    email: chardin@cirglo.com
+keywords:
+  - hadoop
+  - hdfs
+  - yarn
+  - bigdata
+apiVersion: v2
+dependencies: []
